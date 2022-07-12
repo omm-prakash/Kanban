@@ -1,0 +1,51 @@
+#############################
+Frontend
+#############################
+1. Login Page
+2. Add List Page
+3. List Form
+4. Add List page with List
+5. List
+	i. Edit
+	ii. Delete
+	iii. Rename
+	iv. Add card button
+	
+6. Card edit/create form
+	Structure:
+		i. Title
+		ii. Deadline
+		iii. Content
+		iv. Edit/Delete
+	
+	Form:
+		i. List
+		ii. Title
+		iii. Content
+		iv. Deadline
+		v. Done
+		
+7. Stat Page
+8. Navbar: 
+	Logo, Summary, SignIn/SignUp
+
+#############################
+Backend
+#############################
+1. Database
+	i. Table1: Account Details
+		id(pk), password(hash value), name, email
+	ii. Table2: List Details
+		(Constrain have atmost 5 most per id)
+		list_id(pk), lname, ldescription, lcreate, id(fk)
+	iii. Table3: Card Details
+		card_id(pk), ctitle, ccontent, cdeadline, done(T/F), list_id(fk)
+
+2. Summary
+3. 
+
+
+
+
+
+

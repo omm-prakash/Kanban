@@ -21,7 +21,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#" style="font-family: 'Prompt', sans-serif;">
+        <a class="navbar-brand" href="/home" style="font-family: 'Prompt', sans-serif;">
             <img src="../static/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
             <strong> Kanban</strong>
         </a>
@@ -33,13 +33,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home </a>
+                    <a class="nav-link" href="/home">Home </a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">ToDo<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/todo">ToDo<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Summary</a>
+                    <a class="nav-link" href="/summary">Summary</a>
                 </li>
             </ul>
             <button class="btn btn-outline-success my-2 my-sm-0 " type="button" data-toggle="modal"
@@ -87,9 +87,10 @@
     <div class="alert-info py-2">
         <div class="d-flex my-2 my-lg-0 justify-content-center align-items-center">
             <h5>Add <strong style="font-family: 'Prompt', sans-serif;">ToDo</strong> List</h5>
-           
-            <a class="btn  my-2 my-sm-0  " data-toggle="modal"
-                data-target="#listModal" type="submit"><h1 class="bi-plus-circle-fill text-success"></h1></a>
+
+            <a class="btn  my-2 my-sm-0  " data-toggle="modal" data-target="#listModal" type="submit">
+                <h1 class="bi-plus-circle-fill text-success"></h1>
+            </a>
             <!-- Modal -->
             <div class="modal fade" id="listModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
@@ -131,90 +132,111 @@
 
     <div class="container-fluid my-3">
         <div class="row">
-            <div class="col-lg-4 col-sm-6 col-md-6  p-3">
-                <div class="container  justify-content-center justify-item-center bg-light border list border-secondary">
-                    <div class="d-flex  justify-content-center py-2 ">
+            {% if lists|length > 0 %}
+            {% for list in lists %}
+            <div class="col-lg-4 col-sm-6 col-md-6  p-3 ">
+                <div
+                    class="container  justify-content-center justify-item-center bg-warning border list border-secondary rounded-lg">
+                    <div class="d-flex  justify-content-center py-3 ">
                         <i class="bi bi-pin-angle-fill text-info"></i>&nbsp;
-                        <h4 class="text-dark"><strong style="font-family: 'Prompt', sans-serif;">Name</strong></h4>
+                        <h4 class="text-dark"><strong style="font-family: 'Prompt', sans-serif;">{{ list['list_name']
+                                }}</strong></h4>
+                    </div>
+                    <div class="d-flex  justify-content-center px-3">
+                        <p class="text-muted">{{ list['list_desc'] }}</p>
                     </div>
                     <div class="d-flex  justify-content-center">
-                        <a href="" class="bi-trash-fill text-danger"></a>&nbsp;&nbsp;
-                        <a href="" class="bi-pencil-square text-success" data-toggle="modal"
-                            data-target="#listModal"></a>&nbsp;&nbsp;
-                        <a href="" class="bi-file-earmark-plus-fill text-dark" data-toggle="modal"
-                            data-target="#card"></a>
+                        <a href="" class=" text-danger"><h5 class="bi-trash-fill"></h5></a>&nbsp;&nbsp;
+                        <a href="" class=" text-success" data-toggle="modal"
+                            data-target="#listModal"><h5 class="bi-pencil-square"></h5></a>&nbsp;&nbsp;
+                        <a href="" class=" text-dark" data-toggle="modal"
+                            data-target="#card"><h5 class="bi-file-earmark-plus-fill"></h5></a>
                     </div>
                     <hr>
-                    <div class="card bg-light mb-3 ">
+                    <!-- CARD -->
+                    {% for card in list['cards'] %}
+                    <div class="card bg-light mb-3 rounded-sm">
                         <div class="card-header in-line border-secondary">
-                            <h5><strong>Card Name</strong></h5>
+                            <h5><strong>{{card['title']}}</strong></h5>
                         </div>
                         <div class="card-body justify-item-center">
-                            <p class="card-text text-primary"><small class="">12/07/2022 12:21</small></p>
+                            <p class="card-text text-primary"><small class="">{{card['deadline']}}</small></p>
                             <!-- <h5 class="card-title"></h5> -->
-                            <p class="card-text text-muted">Card Body will be here Lorem ipsum dolor sit amet,
-                                consectetur adipisicing elit. Hic officiis pariatur possimus distinctio minima! Ad
-                                adipisci, quod pariatur quos quam dolorem dolore ipsum eligendi impedit minima tempore
-                                sed iusto. Architecto!</p>
-                            <a href="" class="bi-trash3 text-danger"></a>
-                            <a href="" class="bi-pencil-square text-success"></a>
+                            <p class="card-text text-muted">{{card['content']}}</p>
+                            <form action="/delete" method="post" class="inline">
+                                <a href="" class="bi-trash3 text-danger" type="submit"></a>
+                                <a href="" class="bi-pencil-square text-success" data-toggle="modal"
+                                    data-target="#card"></a>
+                            </form>
                         </div>
                     </div>
-                </div>
-                <!-- Modal -->
-                <div class="modal fade" id="card" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalCenterTitle"><strong
-                                        style="font-family: 'Prompt', sans-serif;">Card</strong></h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="cardTitle">Title</label>
-                                            <input type="text" class="form-control" id="cardTitle" required>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="card" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="exampleModalCenterTitle"><strong
+                                            style="font-family: 'Prompt', sans-serif;">Card Details</strong></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="cardTitle">Title</label>
+                                                <input type="text" class="form-control" id="cardTitle" required
+                                                    value="{{card['title']}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cardDesc">Description</label>
+                                                <textarea class="form-control" id="cardDesc" rows="3"
+                                                    >{{card['content']}}</textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="selectList">Select List</label>
+                                                <select class="form-control" id="selectList" required>
+                                                    {% for list in lists %}
+                                                    <option>{{ list['list_name'] }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="deadline">Deadline</label>
+                                                <input type="datetime-local" id="deadline" class="form-control"
+                                                    placeholder="Select Deadline" required value="{{card['deadline']}}">
+                                                <small id="descHelp" class="form-text text-muted">Try to complete the
+                                                    task
+                                                    before deadline.</small>
+                                            </div>
+                                            <div class="custom-control custom-switch">
+                                                {% if card['completed']==1 %}
+                                                <input type="checkbox" class="custom-control-input" id="done" checked>
+                                                {% else %}
+                                                <input type="checkbox" class="custom-control-input" id="done">
+                                                {% endif %}
+                                                <label class="custom-control-label" for="done">Completed</label>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="cardDesc">Description</label>
-                                            <textarea class="form-control" id="cardDesc" rows="3"></textarea>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-danger"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn bi-star btn-success"> Save</button>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="selectList">Select List</label>
-                                            <select class="form-control" id="selectList" required>
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="deadline">Deadline</label>
-                                            <input type="datetime-local" id="deadline" class="form-control"
-                                                placeholder="Select Deadline" required>
-                                            <small id="descHelp" class="form-text text-muted">Try to complete the task
-                                                before deadline.</small>
-                                        </div>
-                                        <div class="custom-control custom-switch">
-                                            <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                                            <label class="custom-control-label" for="customSwitch1">Completed</label>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-danger"
-                                            data-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn bi-star btn-success"> Save</button>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    {% endfor %}
                 </div>
             </div>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
 
@@ -225,9 +247,9 @@
         <p class="col-md-4 mb-0 text-muted"> &copy; 2022 Kanban, All rights reserved</p>
 
         <ul class="nav col-md-4 justify-content-end">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            <li class="nav-item"><a href="/home" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="/faqs" class="nav-link px-2 text-muted">FAQs</a></li>
+            <li class="nav-item"><a href="/home" class="nav-link px-2 text-muted">About</a></li>
         </ul>
     </footer>
     <script>flatpickr("input[type=datetime-local]", {});</script>

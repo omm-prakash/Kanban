@@ -1,0 +1,179 @@
+local_run.sh: line 19: sid: command not found
+[2022-07-14 00:03:32,792] INFO in main: App setup complete
+ * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.63.221:8080 (Press CTRL+C to quit)
+ * Restarting with stat
+[2022-07-14 00:03:33,021] INFO in main: App setup complete
+ * Debugger is active!
+ * Debugger PIN: 260-321-484
+127.0.0.1 - - [14/Jul/2022 00:04:24] "GET /signup HTTP/1.1" 200 -
+127.0.0.1 - - [14/Jul/2022 00:04:24] "[36mGET /static/images/logo.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:04:41] "POST /signup HTTP/1.1" 200 -
+127.0.0.1 - - [14/Jul/2022 00:04:41] "[36mGET /static/images/logo.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:04:48] "[35m[1mPOST /signup HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2088, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2070, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1515, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1513, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1499, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/application/controllers.py", line 50, in signup
+    account = Account.query.filter(Account.email==email).first()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py", line 550, in __get__
+    mapper = orm.class_mapper(type)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/base.py", line 442, in class_mapper
+    mapper = _inspect_mapped_class(class_, configure=configure)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/base.py", line 421, in _inspect_mapped_class
+    mapper._check_configure()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 1924, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 3448, in _configure_registries
+    _do_configure_registries(registries, cascade)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 3487, in _do_configure_registries
+    mapper._post_configure_properties()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 1941, in _post_configure_properties
+    prop.init()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/interfaces.py", line 231, in init
+    self.do_init()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/relationships.py", line 2135, in do_init
+    self._process_dependent_arguments()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/relationships.py", line 2230, in _process_dependent_arguments
+    self.target = self.entity.persist_selectable
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 1113, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/relationships.py", line 2120, in entity
+    % (self.key, type(argument))
+sqlalchemy.exc.ArgumentError: relationship 'user' expects a class or a mapper argument (received: <class 'sqlalchemy.sql.schema.Table'>)
+127.0.0.1 - - [14/Jul/2022 00:04:48] "[36mGET /signup?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:04:48] "[36mGET /signup?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:04:48] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:04:48] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+ * Detected change in '/home/omm/Desktop/IITM/MAD1/Kanban/application/controllers.py', reloading
+ * Restarting with stat
+[2022-07-14 00:05:18,914] INFO in main: App setup complete
+ * Debugger is active!
+ * Debugger PIN: 260-321-484
+ * Detected change in '/home/omm/Desktop/IITM/MAD1/Kanban/application/controllers.py', reloading
+ * Restarting with stat
+[2022-07-14 00:05:47,362] INFO in main: App setup complete
+ * Debugger is active!
+ * Debugger PIN: 260-321-484
+127.0.0.1 - - [14/Jul/2022 00:05:56] "GET /signup HTTP/1.1" 200 -
+127.0.0.1 - - [14/Jul/2022 00:05:56] "[36mGET /static/images/logo.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:06:07] "[35m[1mPOST /signup HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2088, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2070, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1515, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1513, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1499, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/application/controllers.py", line 50, in signup
+    account = Account.query.filter_by(email==email).first()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask_sqlalchemy/__init__.py", line 550, in __get__
+    mapper = orm.class_mapper(type)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/base.py", line 442, in class_mapper
+    mapper = _inspect_mapped_class(class_, configure=configure)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/base.py", line 421, in _inspect_mapped_class
+    mapper._check_configure()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 1924, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 3448, in _configure_registries
+    _do_configure_registries(registries, cascade)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 3487, in _do_configure_registries
+    mapper._post_configure_properties()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/mapper.py", line 1941, in _post_configure_properties
+    prop.init()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/interfaces.py", line 231, in init
+    self.do_init()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/relationships.py", line 2135, in do_init
+    self._process_dependent_arguments()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/relationships.py", line 2230, in _process_dependent_arguments
+    self.target = self.entity.persist_selectable
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/util/langhelpers.py", line 1113, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/sqlalchemy/orm/relationships.py", line 2120, in entity
+    % (self.key, type(argument))
+sqlalchemy.exc.ArgumentError: relationship 'user' expects a class or a mapper argument (received: <class 'sqlalchemy.sql.schema.Table'>)
+127.0.0.1 - - [14/Jul/2022 00:06:07] "[36mGET /signup?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:06:07] "[36mGET /signup?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:06:07] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:06:07] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+ * Detected change in '/home/omm/Desktop/IITM/MAD1/Kanban/application/models.py', reloading
+ * Restarting with stat
+[2022-07-14 00:07:31,235] INFO in main: App setup complete
+ * Debugger is active!
+ * Debugger PIN: 260-321-484
+127.0.0.1 - - [14/Jul/2022 00:07:34] "GET /signup HTTP/1.1" 200 -
+127.0.0.1 - - [14/Jul/2022 00:07:34] "[36mGET /static/images/logo.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:07:44] "[35m[1mPOST /signup HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2088, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2070, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1515, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1513, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1499, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/application/controllers.py", line 50, in signup
+    account = Account.query.filter_by(email==email).first()
+TypeError: filter_by() takes 1 positional argument but 2 were given
+127.0.0.1 - - [14/Jul/2022 00:07:44] "[36mGET /signup?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:07:44] "[36mGET /signup?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:07:44] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:07:44] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+ * Detected change in '/home/omm/Desktop/IITM/MAD1/Kanban/application/controllers.py', reloading
+ * Restarting with stat
+[2022-07-14 00:08:00,768] INFO in main: App setup complete
+ * Debugger is active!
+ * Debugger PIN: 260-321-484
+127.0.0.1 - - [14/Jul/2022 00:08:03] "GET /signup HTTP/1.1" 200 -
+127.0.0.1 - - [14/Jul/2022 00:08:04] "[36mGET /static/images/logo.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:08:13] "[35m[1mPOST /signup HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2088, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 2070, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1535, in finalize_request
+    response = self.make_response(rv)
+  File "/home/omm/Desktop/IITM/MAD1/Kanban/.env/lib/python3.7/site-packages/flask/app.py", line 1699, in make_response
+    f"The view function for {request.endpoint!r} did not"
+TypeError: The view function for 'signup' did not return a valid response. The function either returned None or ended without a return statement.
+127.0.0.1 - - [14/Jul/2022 00:08:13] "[36mGET /signup?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:08:13] "[36mGET /signup?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:08:13] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:08:13] "[36mGET /signup?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+ * Detected change in '/home/omm/Desktop/IITM/MAD1/Kanban/application/controllers.py', reloading
+ * Restarting with stat
+[2022-07-14 00:08:48,315] INFO in main: App setup complete
+ * Debugger is active!
+ * Debugger PIN: 260-321-484
+127.0.0.1 - - [14/Jul/2022 00:08:51] "GET /signup HTTP/1.1" 200 -
+127.0.0.1 - - [14/Jul/2022 00:08:51] "[36mGET /static/images/logo.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [14/Jul/2022 00:09:00] "POST /signup HTTP/1.1" 200 -
+127.0.0.1 - - [14/Jul/2022 00:09:00] "[36mGET /static/images/logo.png HTTP/1.1[0m" 304 -

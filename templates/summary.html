@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:ital@1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="shortcut icon" href="../static/images/favicon.ico" />
 
     <title>Kanban</title>
 </head>
@@ -33,15 +35,33 @@
                     <a class="nav-link" href="/home">Home </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/todo">ToDo</a>
+                    <a class="nav-link" href="/todo">Board</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="/summary">Summary<span class="sr-only">(current)</span></a>
                 </li>
             </ul>
-                <button class="btn btn-outline-success my-2 my-sm-0 " type="button" data-toggle="modal"
-                    data-target="#exampleModalCenter">SignIn</button>
-                <button class="btn btn-outline-danger my-2 my-sm-0 mx-2" type="button">SignUp</button>
+            {% if signedin %}
+            <h6 class="text-white ">Welcome, <strong>{{name}} </strong></h6>&nbsp;&nbsp;
+            <div class="dropdown dropleft">
+                <a href="" class="my-sm-0 dropdown-toggle my-2 " id="profile" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <h3 class="bi text-white bi-person-circle"></h3>
+                </a>
+                <div class="dropdown-menu px-3" aria-labelledby="profile">
+                    <p>{{email}}</p>
+                    <p class="text-muted"><small>Task Completed: {{pendings}}</small></p>
+                    <p class="text-muted"><small>Task Pendings: {{done}}</small></p>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item text-danger p-0" href="/logout">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <button class="btn btn-outline-success my-2 my-sm-0 " type="button" data-toggle="modal"
+                data-target="#signInForm">SignIn</button>
+            <a href="/signup" class="btn btn-outline-danger my-2 my-sm-0 mx-2" role="button"
+                aria-pressed="true">SignUp</a>
+            {% endif %}
         </div>
     </nav>
 
@@ -51,12 +71,13 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="exampleModalCenterTitle"style="font-family: 'Prompt', sans-serif;"><strong>Enter Details</strong></h4>
+                    <h4 class="modal-title" id="exampleModalCenterTitle" style="font-family: 'Prompt', sans-serif;">
+                        <strong>Enter Details</strong></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form class=" p-3">
+                <form class=" p-3" method="post" action="/signin">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>

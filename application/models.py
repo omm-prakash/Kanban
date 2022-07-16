@@ -49,15 +49,21 @@ class Card(db.Model):
     card_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String, nullable=False)
     content = db.Column(db.String)
-    deadline = db.Column(db.Integer, nullable=False)
+    deadline = db.Column(db.String, nullable=False)
+    creation_datetime = db.Column(db.String, nullable=False)
     completed = db.Column(db.Integer, nullable=False, default=0)
+    last_update = db.Column(db.String)
+    completed_datetime = db.Column(db.String)
 
 # CREATE TABLE "card" (
 # 	"card_id"	INTEGER,
 # 	"title"	TEXT NOT NULL,
 # 	"content"	TEXT,
-# 	"deadline"	NUMERIC NOT NULL,
+# 	"deadline"	TEXT NOT NULL,
+#   "creation_datetime" TEXT NOT NULL,
 # 	"completed"	INTEGER NOT NULL DEFAULT 0,
+#   "completed_datetime" TEXT,
+#   "last_update" TEXT,
 # 	PRIMARY KEY("card_id" AUTOINCREMENT)
 # );
 
@@ -74,22 +80,3 @@ class List_Card(db.Model):
 # 	PRIMARY KEY("list_id","card_id")
 #   );
 
-
-
-# class User(db.Model):
-#     __tablename__ = 'user'
-#     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     username = db.Column(db.String, unique=True)
-#     email = db.Column(db.String, unique=True)
-
-# class Article(db.Model):
-#     __tablename__ = 'article'
-#     article_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     title = db.Column(db.String)
-#     content = db.Column(db.String)
-#     authors = db.relationship("User", secondary="article_authors")
-
-# class ArticleAuthors(db.Model):
-#     __tablename__ = 'article_authors'
-#     user_id = db.Column(db.Integer,   db.ForeignKey("user.user_id"), primary_key=True, nullable=False)
-#     article_id = db.Column(db.Integer,  db.ForeignKey("article.article_id"), primary_key=True, nullable=False) 

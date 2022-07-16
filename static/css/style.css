@@ -1,0 +1,31 @@
+
+    .dropdown-toggle::after {
+        content: none;
+    }
+    .dropleft .dropdown-toggle::before {
+        display: inline-block;
+        margin-right: 0.255em;
+        vertical-align: 0.255em;
+        content: none;
+        border-top: 0.3em solid transparent;
+        border-right: 0.3em solid;
+        border-bottom: 0.3em solid transparent;
+    }   
+    /* .flex-wrapper {
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      
+      .footer {
+        margin-top: auto;
+      } */
+      
+    .container{
+    min-height: 70%;
+    min-height: -webkit-calc(100% - 186px);
+    min-height: -moz-calc(100% - 186px);
+    min-height: calc(100% - 186px);
+}
+

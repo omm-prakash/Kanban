@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% include 'head.html' %}
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="/home" style="font-family: 'Prompt', sans-serif;">
+                <img src="../static/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                <strong> Kanban</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/home">Home </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/todo">Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/summary">Summary</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container bg-light p-3 my-3">
+        <h3 style="font-family: 'Prompt', sans-serif;"><strong>Sign Up</strong></h3>
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <hr>
+        <div class="text-danger">
+            {% from "security/_macros.html" import render_field_with_errors, render_field %}
+            {% include "security/_messages.html" %}
+        </div>
+        <div class="px-5">
+            <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
+                {{ register_user_form.hidden_tag() }}
+                {{ render_field_with_errors(register_user_form.email, class="form-control") }}
+                {{ render_field_with_errors(register_user_form.password, class="form-control") }}
+
+                {% if register_user_form.password_confirm %}
+                {{ render_field_with_errors(register_user_form.password_confirm, class="form-control") }}
+                {% endif %}
+                {{ render_field(register_user_form.submit,class="btn btn-primary") }}
+                <small class="form-text text-muted">Already have an account? Click <a href="/login">here</a> to
+                    login.</small>
+            </form>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+</body>
+
+</html>

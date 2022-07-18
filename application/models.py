@@ -1,13 +1,26 @@
-from enum import unique
 from .database import db
+from flask_security import UserMixin, RoleMixin
+from flask_login import login_manager
 
-class Account(db.Model):
+roles_users = db.Table('roles_users',
+        db.Column('user_id', db.Integer(), db.ForeignKey('account.id')),
+        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))    
+
+class Account(db.Model, UserMixin):
     __tablename__ = 'account'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    password = db.Column(db.String, nullable=False)
-    name = db.Column(db.String, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    username = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
+    active = db.Column(db.Boolean())
     lists = db.relationship('List', secondary="account_list")
+    roles = db.relationship('Role', secondary=roles_users,backref=db.backref('users', lazy='dynamic'))
+
+class Role(db.Model, RoleMixin):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
 
 # CREATE TABLE "account" (
 # 	"id"	INTEGER,
@@ -51,7 +64,7 @@ class Card(db.Model):
     content = db.Column(db.String)
     deadline = db.Column(db.String, nullable=False)
     creation_datetime = db.Column(db.String, nullable=False)
-    completed = db.Column(db.Integer, nullable=False, default=0)
+    completed = db.Column(db.Boolean(), default=0)
     last_update = db.Column(db.String)
     completed_datetime = db.Column(db.String)
 

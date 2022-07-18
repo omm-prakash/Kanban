@@ -1,0 +1,26 @@
+{% if current_user.is_authenticated %}
+<h6 class="text-white ">Welcome, <strong>{{current_user.username}} </strong></h6>&nbsp;&nbsp;
+<div class="dropdown dropleft">
+    <a href="" class="my-sm-0 dropdown-toggle my-2 " id="profile" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <h3 class="bi text-white bi-person-circle"></h3>
+    </a>
+    <div class="dropdown-menu px-3" aria-labelledby="profile">
+        <p>{{current_user.email}}</p>
+        <p class="text-center text-success"><small>
+                {% for role in current_user.roles%}
+                {{role.name}}&nbsp;
+                {% endfor %}</small>
+        </p>
+        <hr>
+        <p class="text-muted"><small>Task Completed: {{pendings}}</small></p>
+        <p class="text-muted"><small>Task Pendings: {{done}}</small></p>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item text-danger p-0" href="/logout">Logout</a>
+    </div>
+</div>
+{% else %}
+<a href="/login" class="btn btn-outline-success my-2 my-sm-0 ">SignIn</a>
+<a href="/register" class="btn btn-outline-danger my-2 my-sm-0 mx-2" role="button"
+    aria-pressed="true">SignUp</a>
+{% endif %}

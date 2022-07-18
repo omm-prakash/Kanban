@@ -1,66 +1,68 @@
+from crypt import methods
 from .database import db
-from flask import Flask, redirect, request
+from flask import redirect, request
 from flask import render_template
 from flask import current_app as app
 from datetime import datetime
-
+from flask_security import login_required, roles_accepted, roles_required, current_user
 from application.models import *
 
 alert_error, alert_color, alert_condition, alert_message = False,'','',''
-signedin,name,email = False,'',''
+# signedin,name,email = False,'',''
 @app.route("/home", methods=['GET'])
 def home():
-    global alert_error, alert_color, alert_condition, alert_message
-    if alert_error:
-        alert_error = False
-        template = render_template('index.html',show=True, alert_color=alert_color, alert_condition=alert_condition, alert_message=alert_message, signedin=signedin)
-        alert_color, alert_condition, alert_message = '','',''
-        return template
-    
-    return render_template('index.html', signedin=signedin,name=name,email=email)
+    return render_template('index.html')
 
 @app.route("/", methods=['GET'])
 def main():
+    if current_user.is_authenticated:
+        id = current_user.id
+        user = Account.query.get(id)
+        if current_user.username is None:
+            user.username = current_user.email.rpartition('@')[0]
+        # role_check = roles_users.query.filter_by(user_id=id).all() is not None
+        role = Role.query.get(2)
+        if role not in user.roles:
+            user.roles.append(role)
+        db.session.commit()
     return render_template('index.html')
 
 @app.route("/todo", methods=['GET'])
 def todo():
-    global signedin, email, name
     global alert_error, alert_color, alert_condition, alert_message
     lists = []
-    if signedin:
-        account = Account.query.filter_by(email=email).first()
-        if account.lists is not None:
-            lists = account.lists
+    if current_user.is_authenticated:
+        lists = current_user.lists
     if alert_error:
         alert_error = False
-        template = render_template('todo.html',show=True, alert_color=alert_color, alert_condition=alert_condition, alert_message=alert_message, lists=lists, signedin=signedin, email=email, name=name)
+        template = render_template('todo.html',show=True, alert_color=alert_color, alert_condition=alert_condition, alert_message=alert_message, lists=lists)
         alert_color, alert_condition, alert_message = '','',''
         return template
-    # print(lists,'--------------------------------------')    
-    return render_template('todo.html', lists=lists, signedin=signedin, email=email, name=name)
+    return render_template('todo.html', lists=lists)
 
 @app.route('/create_list', methods=['POST'])
+@login_required
 def create_list():
     global alert_error, alert_color, alert_condition, alert_message, email
-    if not signedin:
-        alert_color = 'alert-danger'
-        alert_error = True
-        alert_condition = 'Not SignedIn'
-        alert_message = 'Please signin to add a list'
-        return redirect('/todo')
-    name_exist = List.query.filter_by(list_name=request.form['list_name'].strip()).first() is not None
+    list_name = request.form['list_name'].strip()
+    list_desc=request.form['list_desc'].strip()
+    name_exist = List.query.filter_by(list_name=list_name).first() is not None
     if name_exist:
         alert_color = 'alert-danger'
         alert_error = True
         alert_condition = 'List Exists'
         alert_message = 'List name already exists, try another.'
         return redirect('/todo')
+    if len(list_name)<1:
+        alert_color = 'alert-danger'
+        alert_error = True
+        alert_condition = 'Invalid Name'
+        alert_message = 'List name cant not be Null.'
+        return redirect('/todo')
     try:
-        account = Account.query.filter_by(email=email).first()
-        list = List(list_name=request.form['list_name'].strip(), list_desc=request.form['list_desc'].strip())
+        list = List(list_name=list_name, list_desc=list_desc)
         db.session.add(list)
-        account.lists.append(list)
+        current_user.lists.append(list)
         db.session.commit()
         return redirect('/todo')
     except:
@@ -71,6 +73,7 @@ def create_list():
         return redirect('/todo')
 
 @app.route('/update_list', methods=['POST'])
+@login_required
 def update_list():
     update_list_name=request.form['update_list_name']
     list_id = int(request.form['list_id'])
@@ -83,7 +86,6 @@ def update_list():
         alert_message = 'Null name not allowed'
         return redirect('/todo')
     list_check = List.query.filter_by(list_name=update_list_name).first()
-    # print(type(list_check.list_id),type(list_id), '-----------------------------------')
     if list_check is not None and list_check.list_id != list_id:
         alert_color = 'alert-danger'
         alert_error = True
@@ -106,6 +108,7 @@ def update_list():
         return redirect('/todo')
 
 @app.route('/delete_list', methods=['POST'])
+@login_required
 def delete_list():
     list_id = request.form['list_id']
     list = List.query.get(list_id)
@@ -116,17 +119,15 @@ def delete_list():
         alert_condition = 'List Not Exists'
         alert_message = 'List does not exists.'
         return redirect('/todo')
-    account = Account.query.filter_by(email=email).first()
-    print(account.lists)
-    account.lists.remove(list)
+    current_user.lists.remove(list)
     db.session.delete(list)
     db.session.commit()
     return redirect('/todo')
 
 @app.route('/create_card', methods=['POST'])
+@login_required
 def create_card():
     global alert_error, alert_color, alert_condition, alert_message
-
     card_title = request.form['card_title'].strip()
     if len(card_title)<1:
         alert_color = 'alert-danger'
@@ -190,6 +191,7 @@ def create_card():
         return redirect('/todo')
 
 @app.route('/delete_card', methods=['POST'])
+@login_required
 def delete_card():
     global alert_error, alert_color, alert_condition, alert_message
     card_id = request.form['card_id']
@@ -215,6 +217,7 @@ def delete_card():
     return redirect('/todo')
 
 @app.route('/update_card', methods=['POST'])
+@login_required
 def update_card():
     global alert_error, alert_color, alert_condition, alert_message
 
@@ -244,7 +247,7 @@ def update_card():
             alert_color = 'alert-danger'
             alert_error = True
             alert_condition = 'Card Name Exists in'
-            alert_message = f'Card must have unique name for the list {list.list_name}.'
+            alert_message = f'Card must have unique name for the selected list i.e. {list.list_name}.'
             return redirect('/todo')
     # print(list_card)
     
@@ -285,123 +288,3 @@ def update_card():
 def summary():
     return render_template('summary.html')
 
-import re
-@app.route("/signup", methods=['GET','POST'])
-def signup():
-    if request.method == 'POST':
-        signup_name=request.form['name'].strip()
-        signup_email=request.form['email']
-        password=request.form['password']
-        confirm_password=request.form['confirm_password']
-        condition, error_message, error = 'Congrats','Your account is made successfully.',False
-        special_char_name=re.compile('[@!$%^&*().<>?/\|}{~:]#0123456789')
-        
-        res = len([ele for ele in signup_name if ele.isalpha()])
-        if special_char_name.search(signup_name) != None or res<1:
-            error = True
-            condition = 'Invalid Name'
-            error_message = 'Only alphabates and space allowed.'
-        elif '@' not in signup_email or len(signup_email)<3:
-            error = True
-            condition = 'Invalid Email'
-            error_message = 'Please enter a valid Email.(Only [A-Z],[a-z],<space>,<_>,[0-9],@ allowed)'
-        elif password != confirm_password:
-            error = True
-            condition = 'Invalid Password'
-            error_message = 'Please enter both of your passwords again.'
-        else:
-            account = Account.query.filter_by(email=signup_email).first()
-            # peter = User.query.filter_by(username='peter').first()
-            if account != None:
-                error = True
-                condition = 'Email Already Exists'
-                error_message = 'Please provide another email.'
-        if error:
-            return render_template('signUp.html', show=True, color='alert-danger', condition=condition, error_message=error_message, name=signup_name,  email=signup_email)
-        try:
-            account = Account(password=password, name=signup_name, email=signup_email)
-            db.session.add(account)
-            db.session.commit()
-        except:
-            error = True
-            condition = 'Error'
-            error_message = 'Server error.'                        
-
-        global signedin, email, name
-        signedin = True
-        email = signup_email
-        name = signup_name
-        return redirect('/home')
-        
-    if request.method == 'GET':
-        return render_template('signUp.html')
-
-@app.route("/signin", methods=['POST'])
-def signin():
-    check_email=request.form['email']
-    password = request.form['password']
-    account = Account.query.filter_by(email=check_email).first()
-    global alert_error, alert_color, alert_condition, alert_message
-    print(account,'--------------------------------------------------')
-    if request.method == 'POST':
-        if account is None:
-            alert_error = True
-            alert_condition = 'Email Not Exists'
-            alert_message = 'Please provide another email.'
-        elif '@' not in check_email or len(check_email)<3:
-            alert_error = True
-            alert_condition = 'Invalid Email'
-            alert_message = 'Please enter a valid Email.(Only [A-Z],[a-z],<space>,<_>,[0-9],@ allowed)'
-        elif account.password != password:
-            alert_error = True
-            alert_condition = 'Wrong Password'
-            alert_message = 'Please provide correct password.'
-        if alert_error:
-            alert_color = 'alert-danger'
-            return redirect('/home')
-
-        global signedin, name, email
-        signedin = True
-        name = account.name
-        email = account.email
-        return redirect('/home')
-
-@app.route('/logout', methods=['GET'])
-def logout():
-    global signedin, name, email
-    signedin = False
-    name = ''
-    email = ''
-    return redirect('/home')
-# from application.models import Article
-
-# @app.route("/", methods=["GET", "POST"])
-# def articles():
-#     app.logger.info("Inside get all articles using info")
-#     articles = Article.query.all()    
-#     app.logger.debug("Inside get all articles using debug")
-#     return render_template("articles.html", articles=articles)
-
-# @app.route("/articles_by/<user_name>", methods=["GET", "POST"])
-# def articles_by_author(user_name):
-#     articles = Article.query.filter(Article.authors.any(username=user_name))
-#     return render_template("articles_by_author.html", articles=articles, username=user_name)
-
-# CREATE TABLE "card" (
-# 	"card_id"	INTEGER,
-# 	"title"	TEXT NOT NULL,
-# 	"content"	TEXT,
-# 	"deadline"	NUMERIC NOT NULL,
-# 	"completed"	INTEGER NOT NULL DEFAULT 0,
-# 	PRIMARY KEY("card_id" AUTOINCREMENT)
-# );
-    
-    # print('''
-    #     card_title: {},
-    #     card_content: {},
-    #     card_deadline: {},
-    #     card_list: {},
-    #     card_completed: {}
-    # '''.format(card_title, card_content, card_deadline, card_list, card_completed))
-    # return redirect('/todo')
-        # card_completed: {}, card_completed

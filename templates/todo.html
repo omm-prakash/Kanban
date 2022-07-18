@@ -2,26 +2,10 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <!-- <style>$enable-gradients:true</style> -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:ital@1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/style.css">
-    <link rel="shortcut icon" href="../static/images/favicon.ico" />
-
-    <title>Kanban</title>
+    {% include 'head.html' %}
 </head>
 
-<body >
+<body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/home" style="font-family: 'Prompt', sans-serif;">
             <img src="../static/images/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -44,64 +28,9 @@
                     <a class="nav-link" href="/summary">Summary</a>
                 </li>
             </ul>
-            {% if signedin %}
-            <h6 class="text-white ">Welcome, <strong>{{name}} </strong></h6>&nbsp;&nbsp;
-            <div class="dropdown dropleft">
-                <a href="" class="my-sm-0 dropdown-toggle my-2 " id="profile" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    <h3 class="bi text-white bi-person-circle"></h3>
-                </a>
-                <div class="dropdown-menu px-3" aria-labelledby="profile">
-                    <p>{{email}}</p>
-                    <p class="text-muted"><small>Task Completed: {{pendings}}</small></p>
-                    <p class="text-muted"><small>Task Pendings: {{done}}</small></p>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger p-0" href="/logout">Logout</a>
-                </div>
-            </div>
-            {% else %}
-            <button class="btn btn-outline-success my-2 my-sm-0 " type="button" data-toggle="modal"
-                data-target="#signInForm">SignIn</button>
-            <a href="/signup" class="btn btn-outline-danger my-2 my-sm-0 mx-2" role="button"
-                aria-pressed="true">SignUp</a>
-            {% endif %}
+            {% include 'log.html' %}
         </div>
     </nav>
-    <!-- SignIn Modal -->
-    <div class="modal fade" id="signInForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="exampleModalCenterTitle" style="font-family: 'Prompt', sans-serif;">
-                        <strong>Enter Details</strong>
-                    </h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form class="p-3" method="post" action="/signin">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="email">Email address</label>
-                            <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
-                                name="email">
-                            <small id="emailHelp" class="form-text text-muted">It's quick and easy.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
-                        </div>
-                        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Log In</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <div class="alert-info py-2">
         <div class="d-flex my-2 my-lg-0 justify-content-center align-items-center">
@@ -128,7 +57,7 @@
                                 <div class="form-group">
                                     <label for="list_name">Name</label>
                                     <input type="text" class="form-control" id="list_name" aria-describedby="emailHelp"
-                                        name="list_name">
+                                        name="list_name" required>
 
                                 </div>
                                 <div class="form-group">
@@ -164,8 +93,8 @@
             {% if lists|length > 0 %}
             {% for list in lists %}
             <div class="col-lg-4 col-sm-6 col-md-6  p-3">
-                <div
-                    class="container  justify-content-center justify-item-center border list border rounded-lg" style="background-color:  #ffd9b8;">
+                <div class="container  justify-content-center justify-item-center border list border rounded-lg"
+                    style="background-color:  #ffd9b8;">
                     <div class="d-flex  justify-content-center py-3 ">
                         <i class="bi bi-pin-angle-fill text-info"></i>&nbsp;
                         <h4 class="text-dark"><strong style="font-family: 'Prompt', sans-serif;">{{
@@ -288,9 +217,7 @@
                                             <div class="form-group">
                                                 <label for="selectList">Select List</label>
                                                 <select class="form-control" id="selectList" name="card_list" required>
-                                                    {% for list in lists %}
                                                     <option>{{ list['list_name'] }}</option>
-                                                    {% endfor %}
                                                 </select>
                                             </div>
                                             <div class="form-group">
@@ -327,7 +254,7 @@
                             <!-- done_chek= bi-star-fill text-success -->
                             <h5>
                                 <strong class="text-dark">{{card['title']}} </strong>
-                                {%if card['completed']==1 %}                                            
+                                {%if card['completed'] %}
                                 <i class="bi bi-star-fill text-success"></i>
                                 {% endif %}
                             </h5>
@@ -398,12 +325,13 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="cardDesc">Description</label>
-                                                <textarea class="form-control" id="cardDesc"
-                                                    rows="3" name="update_content">{{card['content']}}</textarea>
+                                                <textarea class="form-control" id="cardDesc" rows="3"
+                                                    name="update_content">{{card['content']}}</textarea>
                                             </div>
                                             <div class="form-group">
                                                 <label for="selectList">Select List</label>
-                                                <select class="form-control" id="selectList" name="update_list" required>
+                                                <select class="form-control" id="selectList" name="update_list"
+                                                    required>
                                                     {% for list in lists %}
                                                     <option>{{ list['list_name'] }}</option>
                                                     {% endfor %}
@@ -412,15 +340,18 @@
                                             <div class="form-group">
                                                 <label for="deadline">Deadline</label>
                                                 <input type="datetime-local" id="deadline" class="form-control"
-                                                    placeholder="Select Deadline" name="update_deadline" required value="{{card['deadline']}}">
+                                                    placeholder="Select Deadline" name="update_deadline" required
+                                                    value="{{card['deadline']}}">
                                                 <small id="descHelp" class="form-text text-muted">Try to complete the
                                                     task
                                                     before deadline.</small>
                                             </div>
-                                            {%if card['completed']==1 %}                                            
-                                            <input type="checkbox" class="" id="update_done" name="update_completed" name="update_completed" checked>
+                                            {%if card['completed']==1 %}
+                                            <input type="checkbox" class="" id="update_done" name="update_completed"
+                                                name="update_completed" checked>
                                             {% else %}
-                                            <input type="checkbox" class="" id="update_done" name="update_completed" name="update_completed">
+                                            <input type="checkbox" class="" id="update_done" name="update_completed"
+                                                name="update_completed">
                                             {% endif %}
                                             <label class="" for="update_done">Completed</label>
                                         </div>
@@ -440,7 +371,7 @@
             </div>
             {% endfor %}
             {% else %}
-            {% if signedin %}
+            {% if current_user.is_authenticated %}
             <h2 class="bi-emoji-frown text-danger p-3"><span class="text-secondary"><strong class="text-dark">
                         Oops,</strong> No list added yet!!</span></h2>
             {%else%}
@@ -455,31 +386,7 @@
 
 
 
-    <footer class="d-flex flex-wrap justify-content-between  py-3  border-top bg-light flex-wrapper">
-        
-        <p class="col-md-4 mb-0 text-muted"> &copy; 2022 Kanban, All rights reserved</p>
-
-        <ul class="nav col-md-4 justify-content-end">
-            <li class="nav-item"><a href="/home" class="nav-link px-2 text-muted">Home</a></li>
-            <li class="nav-item"><a href="/faqs" class="nav-link px-2 text-muted">FAQs</a></li>
-            <li class="nav-item"><a href="/home" class="nav-link px-2 text-muted">About</a></li>
-        </ul>
-        
-    </footer>
-    <script>flatpickr("input[type=datetime-local]", {});</script>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+    {% include 'footer.html' %}
 </body>
 
 </html>

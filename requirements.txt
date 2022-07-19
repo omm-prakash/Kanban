@@ -3,3 +3,4 @@ Flask-SQLAlchemy==2.5.1
 Flask-Security
 email_validator
 bcrypt
+matplotlib

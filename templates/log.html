@@ -13,8 +13,9 @@
                 {% endfor %}</small>
         </p>
         <hr>
-        <p class="text-muted"><small>Task Completed: {{pendings}}</small></p>
-        <p class="text-muted"><small>Task Pendings: {{done}}</small></p>
+
+        <p class="text-muted"><small>Task Completed: </small>&nbsp;<span class="text-primary">{{current_user.tcompleted}}</span></p>
+        <p class="text-muted"><small>Task Pendings: </small>&nbsp;<span class="text-primary">{{current_user.tpending}}</span></p>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item text-danger p-0" href="/logout">Logout</a>
     </div>

@@ -1,3 +1,4 @@
+from email.policy import default
 from .database import db
 from flask_security import UserMixin, RoleMixin
 from flask_login import login_manager
@@ -13,6 +14,9 @@ class Account(db.Model, UserMixin):
     username = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     active = db.Column(db.Boolean())
+    tpending = db.Column(db.Integer, default=0)
+    tcompleted = db.Column(db.Integer, default=0)
+    # toverdue = db.Column(db.Integer, default=0)
     lists = db.relationship('List', secondary="account_list")
     roles = db.relationship('Role', secondary=roles_users,backref=db.backref('users', lazy='dynamic'))
 
@@ -25,8 +29,12 @@ class Role(db.Model, RoleMixin):
 # CREATE TABLE "account" (
 # 	"id"	INTEGER,
 # 	"password"	TEXT NOT NULL,
-# 	"name"	TEXT NOT NULL,
+# 	"username"	TEXT,
 # 	"email"	TEXT NOT NULL UNIQUE,
+# 	"active"	INTEGER,
+# 	"tpending"	INTEGER DEFAULT 0,
+# 	"tcompleted"	INTEGER DEFAULT 0,
+# 	"toverdue"	INTEGER DEFAULT 0,
 # 	PRIMARY KEY("id" AUTOINCREMENT)
 # );
 
@@ -35,6 +43,9 @@ class List(db.Model):
     list_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     list_name = db.Column(db.String, nullable=False)
     list_desc = db.Column(db.String)
+    lpending = db.Column(db.Integer, default=0)
+    lcompleted = db.Column(db.Integer, default=0)
+    loverdue = db.Column(db.Integer, default=0)
     cards = db.relationship('Card', secondary="list_card")
 
 # CREATE TABLE "list" (

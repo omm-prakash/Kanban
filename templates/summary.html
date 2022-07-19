@@ -22,7 +22,7 @@
                     <a class="nav-link" href="/home">Home </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/todo">Board</a>
+                    <a class="nav-link" href="/board">Board</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="/summary">Summary<span class="sr-only">(current)</span></a>
@@ -31,18 +31,60 @@
             {% include 'log.html' %}
         </div>
     </nav>
+    <div class="container-fluid p-3" style="background-color: #feffed;">
+        {% if current_user.is_authenticated %}
+        {% for list in lists %}
+        <div class="row my-2">
+            <div class="container border my-2 rounded p-3" style="background-color: #f3ffcd;">
+                <h1 style="font-family: 'Prompt', sans-serif;"><strong>{{list['list_name']}}</strong></h1>
+                <small class="bi-emoji-smile text-success"> Completed Tasks: <span
+                        class="text-dark">{{list['lcompleted']}}</span></small>&nbsp;
+                <small class="bi-emoji-frown text-danger"> Over Due: <span
+                        class="text-dark">{{list['loverdue']}}</span></small>&nbsp;
+                <small class="bi-emoji-neutral text-primary"> Pendings: <span
+                        class="text-dark">{{list['lpending']}}</span></small>
 
-    <div class="container-fluid bg-warning">
-        <h1>Summary</h1>
-        <div class="row">
-            <h2>row1</h2>
+                <hr>
+                <div class="row px-3">
+                    <div class="col-lg-6 col-md-6 col-sm-12 p-3">
+                        <div>
+                        <h4 class="text-center"><strong>Pending & Completed Task</strong></h4>
+                        <img src="./static/plots/list_{{list['list_id']}}.png" class="rounded" alt="Image not found"
+                            style="width: 100%;; height: 100%;">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 p-3">
+                        <div>
+                        <h4 class="text-center"><strong>Task Completed with Date</h4>
+                        <img src="./static/plots/trend_{{list['list_id']}}.png" class="rounded" alt="No card found!!"
+                            style="width: 100%;; height: 100%;">
+                    </div></div>
+                </div>
+                <div class="row px-4">
+                    {% for card in list['cards'] %}
+                    <div class="col-lg-4 list-group col-md-6 col-sm-12  ">
+                        <div class="list-group-item my-2 rounded list-group-item-danger">
+                            <div class=" w-100 justify-content-between">
+                                <h5 class="mb-1"><strong>{{card['title']}}</strong></h5>
+                            </div>
+                            <small>Card Creation: <span class="text-muted">{{card['creation_datetime']}}</span></small>
+                            <hr>
+                            <p><small>Last Update: <span class="text-muted">{{card['last_update']}}</span></small>&nbsp;
+                                <small>Last Completion: <span
+                                        class="text-muted">{{card['completed_datetime']}}</span></small>
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
-        <div class="row border p-3">
-            <h2>row1</h2>
-        </div>
-        <div class="row border">
-            <h2>row1</h2>
-        </div>
+        {% endfor %}
+        {% else %}
+        <h2 class="bi-emoji-smile text-success p-3"><span class="text-secondary"><strong class="text-dark">
+                    SignIn</strong> to get Summary!!</span></h2>
+
+        {% endif %}
     </div>
     {% include 'footer.html' %}
 </body>

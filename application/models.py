@@ -1,11 +1,18 @@
 from email.policy import default
 from .database import db
 from flask_security import UserMixin, RoleMixin
-from flask_login import login_manager
 
 roles_users = db.Table('roles_users',
         db.Column('user_id', db.Integer(), db.ForeignKey('account.id')),
         db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))    
+
+# CREATE TABLE "roles_users" (
+# 	"id"	INTEGER,
+# 	"user_id"	INTEGER,
+# 	"role_id"	INTEGER,
+# 	FOREIGN KEY("role_id") REFERENCES "role"("id"),
+# 	FOREIGN KEY("user_id") REFERENCES "account"("id")
+# );
 
 class Account(db.Model, UserMixin):
     __tablename__ = 'account'
@@ -20,12 +27,6 @@ class Account(db.Model, UserMixin):
     lists = db.relationship('List', secondary="account_list")
     roles = db.relationship('Role', secondary=roles_users,backref=db.backref('users', lazy='dynamic'))
 
-class Role(db.Model, RoleMixin):
-    __tablename__ = 'role'
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(80), unique=True)
-    description = db.Column(db.String(255))
-
 # CREATE TABLE "account" (
 # 	"id"	INTEGER,
 # 	"password"	TEXT NOT NULL,
@@ -34,8 +35,20 @@ class Role(db.Model, RoleMixin):
 # 	"active"	INTEGER,
 # 	"tpending"	INTEGER DEFAULT 0,
 # 	"tcompleted"	INTEGER DEFAULT 0,
-# 	"toverdue"	INTEGER DEFAULT 0,
 # 	PRIMARY KEY("id" AUTOINCREMENT)
+# );
+
+class Role(db.Model, RoleMixin):
+    __tablename__ = 'role'
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+# CREATE TABLE "role" (
+# 	"id"	INTEGER,
+# 	"name"	TEXT UNIQUE,
+# 	"description"	TEXT,
+# 	PRIMARY KEY("id")
 # );
 
 class List(db.Model):
@@ -52,6 +65,9 @@ class List(db.Model):
 # 	"list_id"	INTEGER,
 # 	"list_name"	TEXT NOT NULL,
 # 	"list_desc"	TEXT,
+# 	"lpending"	INTEGER DEFAULT 0,
+# 	"lcompleted"	INTEGER DEFAULT 0,
+# 	"loverdue"	INTEGER DEFAULT 0,
 # 	PRIMARY KEY("list_id" AUTOINCREMENT)
 # );
 
@@ -84,10 +100,10 @@ class Card(db.Model):
 # 	"title"	TEXT NOT NULL,
 # 	"content"	TEXT,
 # 	"deadline"	TEXT NOT NULL,
-#   "creation_datetime" TEXT NOT NULL,
-# 	"completed"	INTEGER NOT NULL DEFAULT 0,
-#   "completed_datetime" TEXT,
-#   "last_update" TEXT,
+# 	"creation_datetime"	TEXT NOT NULL,
+# 	"completed"	INTEGER DEFAULT 0,
+# 	"completed_datetime"	TEXT,
+# 	"last_update"	TEXT,
 # 	PRIMARY KEY("card_id" AUTOINCREMENT)
 # );
 
@@ -102,5 +118,5 @@ class List_Card(db.Model):
 # 	FOREIGN KEY("list_id") REFERENCES "list"("list_id"),
 # 	FOREIGN KEY("card_id") REFERENCES "card"("card_id"),
 # 	PRIMARY KEY("list_id","card_id")
-#   );
+# );
 

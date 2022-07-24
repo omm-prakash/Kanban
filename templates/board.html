@@ -3,6 +3,7 @@
 
 <head>
     {% include 'head.html' %}
+    <title>Board</title>
 </head>
 
 <body>
@@ -93,7 +94,7 @@
             {% if lists|length > 0 %}
             {% for list in lists %}
             <div class="col-lg-4 col-sm-6 col-md-6  p-3">
-                <div class="container  justify-content-center justify-item-center border list border rounded-lg" style="background-color:  #ffd9b8;">
+                <div class="justify-content-center justify-item-center border list border px-3 rounded-lg" style="background-color:  #ffd9b8;">
                     <div class="d-flex  justify-content-center py-3 ">
                         <i class="bi bi-pin-angle-fill text-info"></i>&nbsp;
                         <h4 class="text-dark"><strong style="font-family: 'Prompt', sans-serif;">{{
@@ -382,12 +383,15 @@
             {% endif %}
             {% endif %}
         </div>
-        <small class="text-muted"><i class="bi bi-star-fill text-success"></i>: task is completed</small>
+        <small class="text-muted"><i class="bi bi-star-fill text-success"></i>: completed</small>&nbsp;
+        <small class="text-muted"><i class="bi bi-trash-fill text-danger"></i>: delete</small>&nbsp;
+        <small class="text-muted"><i class="bi bi-file-earmark-plus-fill text-dark"></i>: add card</small>&nbsp;
+        <small class="text-muted"><i class="bi bi-pencil-square text-success"></i>: edit</small>
     </div>
 
 
 
-
+    
     {% include 'footer.html' %}
 </body>
 

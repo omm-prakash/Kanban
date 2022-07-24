@@ -330,7 +330,7 @@ def update_card():
 
 @app.route("/summary", methods=['GET'])
 def summary():
-    lists=[]
+    lists,overdue_count=[],0
     if current_user.is_authenticated:
         lists = current_user.lists
         keys = ['Pendings', 'Completed']

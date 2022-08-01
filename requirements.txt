@@ -4,3 +4,5 @@ Flask-Security
 email_validator
 bcrypt
 matplotlib
+flask-restful
+flask-bcrypt

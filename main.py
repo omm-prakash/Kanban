@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_restful import Api
 from application import config
 from application.config import LocalDevelopmentConfig
 from application.database import db
@@ -7,10 +8,6 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_security import Security, SQLAlchemySessionUserDatastore, SQLAlchemyUserDatastore
 from application.models import Account, Role
 from flask_login import LoginManager
-
-# import logging
-# logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
-
 
 app = None
 
@@ -24,14 +21,27 @@ def create_app():
       print("Staring Local Development")
       app.config.from_object(LocalDevelopmentConfig)
     db.init_app(app)
+
+
     app.app_context().push()
     app.logger.info("App setup complete")
+
     # Setup Flask-Security
     user_datastore = SQLAlchemySessionUserDatastore(db.session, Account, Role)
     security = Security(app, user_datastore)
+    
     return app
 
 app = create_app()
+
+api = Api(app)
+app.app_context().push()
+
+from application.api import *
+
+api.add_resource(ListApi, '/api/list/<string:email>/<string:list_name>', '/api/list/<string:email>')
+api.add_resource(CardApi, '/api/card/<int:list_id>/<string:card_name>', '/api/card/<int:list_id>')
+api.add_resource(SummaryApi, '/api/<string:email>/summary')
 
 # Import all the controllers so they are loaded
 from application.controllers import *

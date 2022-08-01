@@ -1,0 +1,654 @@
+openapi: 3.0.0
+info:
+  title: Kanban Project API
+  description: >
+    <div>This Api should be used to do CURD operations over List and Cards with proper authentication.
+    <h2>General instructions:</h2>
+    <ol> 
+    <li>First login to get access the data that belongs to you.</li>
+    <li>This is my first API documantation, any suggetion or guidance are welcome.</li>
+    <li>Only allowed data, that can be access through API are mentioned in the below schemas.</li>
+    </ol>
+    </div>
+
+    <h3> List Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>list_name</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>list_name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>list_desc</td>
+        <td>String</td>
+        <td></td>
+      </tr>         
+      <tr>
+        <td>lpending</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>         
+      <tr>
+        <td>lcompleted</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>         
+      <tr>
+        <td>loverdue</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>         
+    </tbody>
+    </table>
+
+    <h3> Card Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>card_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>title</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>content</td>
+        <td>String</td>
+        <td></td>
+      </tr>      
+      <tr>
+        <td>deadline</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>         
+      <tr>
+        <td>completed</td>
+        <td>Boolean</td>
+        <td>Default: 0</td>
+      </tr>         
+    </tbody>
+    </table>
+
+
+    <h3> Account Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>username</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>email</td>
+        <td>String</td>
+        <td>Not Null, Unique</td>
+      </tr>
+      <tr>
+        <td>tpending</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>
+      <tr>
+        <td>tcompleted</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+    </tbody>
+    </table>
+
+    <h3> Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Resource</th>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Course</td>
+        <td>COURSE001</td>
+        <td>Course Name is required and should be string.</td>
+      </tr>
+      <tr>
+        <td>Course</td>
+        <td>COURSE002</td>
+        <td>Course Code is required and should be string.</td>
+      </tr>
+      <tr>
+        <td>Course</td>
+        <td>COURSE003</td>
+        <td> Course Description should be string.</td>
+      </tr>
+      <tr>
+        <td>Student</td>
+        <td>STUDENT001</td>
+        <td>Roll Number required and should be String </td>
+      </tr>
+      <tr>
+        <td>Student</td>
+        <td>STUDENT002</td>
+        <td>First Name is required and should be String </td>
+      </tr>
+      <tr>
+        <td>Student</td>
+        <td>STUDENT003</td>
+        <td>Last Name is String </td>
+      </tr>
+      <tr>
+        <td>Enrollment</td>
+        <td>ENROLLMENT001</td>
+        <td>Course does not exist</td>
+      </tr>
+      <tr>
+        <td>Enrollment</td>
+        <td>ENROLLMENT002</td>
+        <td>Student does not exist.</td>
+      </tr>  
+      <tr>
+        <td>Enrollment</td>
+        <td>ENROLLMENT003</td>
+        <td>Course Code is required and should be string.</td>
+      </tr> 
+    </tbody>
+    </table>
+
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8080/
+paths:
+  /api/list/{list_name}:
+    description: End point to read, update and delete a list resource with list_name = courseId.
+    get:
+      description: Operation to Read list resource.
+      parameters:
+        - in: path
+          name: list_name
+          required: true
+          schema:
+            type: integer
+            example: 201
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: list object
+                type: object
+                properties:
+                  list_name:
+                    type: integer
+                    example: 201
+                  course_name:
+                    type: string
+                    example: Maths1
+                  course_code:
+                    type: string
+                    example: MA101
+                  course_description:
+                    type: string
+                    example: Course Description Example
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Course not found
+
+    put:
+      description: Operation to update the list resource.
+      parameters:
+        - in: path
+          name: list_name
+          required: true
+          schema:
+            type: integer
+            example: 201
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_name:
+                  type: string
+                  example: Maths1
+                course_code:
+                  type: string
+                  example: MA101
+                course_description:
+                  type: string
+                  example: Course Description Example
+      responses:
+        '200':
+          description: Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_name:
+                    type: integer
+                    example: 201
+                  course_name:
+                    type: string
+                    example: Maths1
+                  course_code:
+                    type: string
+                    example: MA101
+                  course_description:
+                    type: string
+                    example: Course Description Example
+        '404':
+          description: Course not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      description: Operation to delete the list resource
+      parameters:
+        - in: path
+          name: list_name
+          required: true
+          schema:
+            type: integer
+            example: 201
+      responses:
+        '200':
+          description: Successfully Deleted
+        '404':
+          description: Course not found
+        '500':
+          description: Intenal Server Error
+
+  /api/list:
+    description: End point to create list resource
+    post:
+      description: Operation to create the list resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_name:
+                  type: string
+                  example: Maths1
+                course_code:
+                  type: string
+                  example: MA101
+                course_description:
+                  type: string
+                  example: Course Description Example
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_name:
+                    type: integer
+                    example: 201
+                  course_name:
+                    type: string
+                    example: Maths1
+                  course_code:
+                    type: string
+                    example: MA101
+                  course_description:
+                    type: string
+                    example: Course Description Example
+        '409':
+          description: course_code already exist
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/card/{card_id}:
+    description: Url to read, update and delete the card resource.
+    get:
+      description: Operation to read card resource
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 101
+                  first_name:
+                    type: string
+                    example: Narendra
+                  last_name:
+                    type: string
+                    example: Mishra
+                  roll_number:
+                    type: string
+                    example: MA19M010
+        '500':
+          description: Internal server error
+        '404':
+          description: Student not found
+
+    put:
+      description: Operation to update the card resource
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Narendra
+                last_name:
+                  type: string
+                  example: Mishra
+                roll_number:
+                  type: string
+                  example: MA19M010
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 101
+                  first_name:
+                    type: string
+                    example: Narendra
+                  last_name:
+                    type: string
+                    example: Mishra
+                  roll_number:
+                    type: string
+                    example: MA19M010
+        '404':
+          description: Student not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      description: Operation to delete the list resource
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Student not found
+
+  /api/card:
+    description: Url to create card resource
+    post:
+      description: Operation to create the card resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Narendra
+                last_name:
+                  type: string
+                  example: Mishra
+                roll_number:
+                  type: string
+                  example: MA19M010
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 101
+                  first_name:
+                    type: string
+                    example: Narendra
+                  last_name:
+                    type: string
+                    example: Mishra
+                  roll_number:
+                    type: string
+                    example: MA19M010
+        '409':
+          description: Student already exist
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/card/{card_id}/list:
+    description: Url to get the the list of enrollments a card with card_id is enrolled in.
+    get:
+      description: URL to get the list of enrollments, the card is enrolled in. This path belongs to the Enrollment table.
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    enrollment_id:
+                      type: integer
+                      example: 10
+                    card_id:
+                      type: integer
+                      example: 101
+                    list_name:
+                      type: integer
+                      example: 201
+        '400':
+          description: Invalid Student Id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Student is not enrolled in any list
+        '500':
+          description: Internal Server Error
+
+    post:
+      description: Add card enrollment aka enroll the card to the list. This path belongs to the Enrollment table.
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                list_name:
+                  type: integer
+                  example: 12345
+      responses:
+        '201':
+          description: Enrollment successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    enrollment_id:
+                      type: integer
+                      example: 10
+                    card_id:
+                      type: integer
+                      example: 101
+                    list_name:
+                      type: integer
+                      example: 201
+        '404':
+          description: Student not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/card/{card_id}/list/{list_name}:
+    description: URL to delete enrollment of a card in a list. This path belongs to the Enrollment table.
+    delete:
+      description: URL to delete enrollment of the card in the list. This path belongs to the Enrollment table.
+      parameters:
+        - in: path
+          name: card_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: list_name
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Successfully deleted
+        '400':
+          description: Invalid Student Id or Course Id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Enrollment for the card not found
+        '500':
+          description: Internal Server Error

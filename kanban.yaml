@@ -1,0 +1,626 @@
+openapi: 3.0.0
+info:
+  title: Kanban Project API
+  description: >
+    <div>This Api should be used to do CURD operations over List and Cards with proper authentication.
+    <h2>General instructions:</h2>
+    <ol> 
+    <li>First login to get access the data that belongs to you.</li>
+    <li>This is my first API documantation, any suggetion or guidance are welcome.</li>
+    <li>Only allowed data, that can be access through API are mentioned in the below schemas.</li>
+    <li>
+    To handle card one need to know list id which can be accessed from List GET request.</li>
+    </ol>
+    </div>
+
+    <h3> List Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>list_name</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>list_name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>list_desc</td>
+        <td>String</td>
+        <td></td>
+      </tr>         
+      <tr>
+        <td>lpending</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>         
+      <tr>
+        <td>lcompleted</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>         
+      <tr>
+        <td>loverdue</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>         
+    </tbody>
+    </table>
+
+    <h3> Card Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>card_id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>title</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>content</td>
+        <td>String</td>
+        <td></td>
+      </tr>      
+      <tr>
+        <td>deadline</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>         
+      <tr>
+        <td>completed</td>
+        <td>Boolean</td>
+        <td>Default: 0</td>
+      </tr>         
+    </tbody>
+    </table>
+
+
+    <h3> Account Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>username</td>
+        <td>String</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>email</td>
+        <td>String</td>
+        <td>Not Null, Unique</td>
+      </tr>
+      <tr>
+        <td>tpending</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+      </tr>
+      <tr>
+        <td>tcompleted</td>
+        <td>Integer</td>
+        <td>Default: 0</td>
+    </tbody>
+    </table>
+    
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:8080/
+paths:
+  /api/list/{email}/{list_name}:
+    description: End point to read, update and delete a list resource with list_name = courseId.
+    get:
+      description: Operation to Read list resource.
+      parameters:
+        - in: path
+          name: list_name
+          required: true
+          schema:
+            type: string
+            example: 'List 1'
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: 'ops@admin.in'
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: list object
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  list_name:
+                    type: string
+                    example: 'List 1'
+                  list_desc:
+                    type: string
+                    example: List Description
+                  lpending:
+                    type: integer
+                    example: 10
+                  lcompleted:
+                    type: integer
+                    example: 0
+                  loverdue:
+                    type: integer
+                    example: 0
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Not Found
+
+    put:
+      description: Operation to update the list resource.
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: 'ops@admin.in'
+        - in: path
+          name: list_name
+          required: true
+          schema:
+            type: string
+            example: List 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                list_name:
+                  type: string
+                  example: List 1
+                list_desc:
+                  type: string
+                  example: List Description
+      responses:
+        '200':
+          description: Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  list_name:
+                    type: string
+                    example: 'List 1'
+                  list_desc:
+                    type: string
+                    example: List Description
+                  lpending:
+                    type: integer
+                    example: 10
+                  lcompleted:
+                    type: integer
+                    example: 0
+                  loverdue:
+                    type: integer
+                    example: 0
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      description: Operation to delete the list resource
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: ops@admin.in
+        - in: path
+          name: list_name
+          required: true
+          schema:
+            type: string
+            example: List 1
+      responses:
+        '200':
+          description: Successfully Deleted
+        '404':
+          description: Not Found
+        '500':
+          description: Intenal Server Error
+
+  /api/list/{email}:
+    description: End point to create list resource
+    post:
+      description: Operation to create the list resource
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: 'ops@admin.in'
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                list_name:
+                  type: string
+                  example: List 1
+                list_desc:
+                  type: string
+                  example: List Description
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  list_id:
+                    type: integer
+                    example: 1
+                  list_name:
+                    type: string
+                    example: 'List 1'
+                  list_desc:
+                    type: string
+                    example: List Description
+                  lpending:
+                    type: integer
+                    example: 10
+                  lcompleted:
+                    type: integer
+                    example: 0
+                  loverdue:
+                    type: integer
+                    example: 0
+        '409':
+          description: list_name already exist
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/card/{list_id}/{card_name}:
+    description: Url to read, update the card resource.
+    get:
+      description: Operation to read card resource
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 0
+        - in: path
+          name: card_name
+          required: true
+          schema:
+            type: string
+            example: card 1
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 101
+                  title:
+                    type: string
+                    example: Card_Name
+                  content:
+                    type: string
+                    example: Card_Content
+                  deadline:
+                    type: string
+                    example: "2022-07-24T12:36"
+                  creation_datetime:
+                    type: string
+                    example: "2022-07-24T12:36"
+                  completed:
+                    type: boolean
+                    example: false
+                  completed_datetime:
+                    type: string
+                    example: "2022-07-25T12:36"
+                  last_update:
+                    type: string
+                    example: "2022-07-25T12:36"
+        '500':
+          description: Internal server error
+        '404':
+          description: Card not found
+
+    put:
+      description: Operation to update the card resource
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 0
+        - in: path
+          name: card_name
+          required: true
+          schema:
+            type: string
+            example: card 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  title:
+                    type: string
+                    example: Card_Name
+                  content:
+                    type: string
+                    example: Card_Content
+                  deadline:
+                    type: string
+                    example: "2022-07-24T12:36"
+                  completed:
+                    type: boolean
+                    example: false
+                  email:
+                    type: string
+                    example: ops@admin.com
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 101
+                  title:
+                    type: string
+                    example: Card_Name
+                  content:
+                    type: string
+                    example: Card_Content
+                  deadline:
+                    type: string
+                    example: "2022-07-24T12:36"
+                  creation_datetime:
+                    type: string
+                    example: "2022-07-24T12:36"
+                  completed:
+                    type: boolean
+                    example: false
+                  completed_datetime:
+                    type: string
+                    example: "2022-07-25T12:36"
+                  last_update:
+                    type: string
+                    example: "2022-07-25T12:36"
+        '404':
+          description: Card not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/card/{email}/{list_id}/{card_name}:
+    description: Url to delete the card resource.
+    delete:
+      description: Operation to delete the card resource
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: ops@admin.com
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 0
+        - in: path
+          name: card_name
+          required: true
+          schema:
+            type: string
+            example: card 1
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Card not found
+
+  /api/card/{list_id}:
+    description: Url to create card resource
+    post:
+      description: Operation to create the card resource
+      parameters:
+        - in: path
+          name: list_id
+          required: true
+          schema:
+            type: integer
+            example: 0
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Card Name
+                content:
+                  type: string
+                  example: Card Content
+                deadline:
+                  type: string
+                  example: yyyy-mm-ddTHH:MM
+                completed:
+                  type: boolean
+                  example: false
+                email:
+                  type: string
+                  example: ops@admin.com
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  card_id:
+                    type: integer
+                    example: 101
+                  title:
+                    type: string
+                    example: Card_Name
+                  content:
+                    type: string
+                    example: Card_Content
+                  deadline:
+                    type: string
+                    example: "2022-07-24T12:36"
+                  creation_datetime:
+                    type: string
+                    example: "2022-07-24T12:36"
+                  completed:
+                    type: boolean
+                    example: false
+                  completed_datetime:
+                    type: string
+                    example: "2022-07-25T12:36"
+                  last_update:
+                    type: string
+                    example: "2022-07-25T12:36"
+        '409':
+          description: Card already exist
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/{email}/summary:
+    description: Url to create card resource
+    get:
+      description: Operation to get Summary Json Data
+      parameters:
+        - in: path
+          name: email
+          required: true
+          schema:
+            type: string
+            example: ops@admin.com
+      responses:
+        '200':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: card object
+                type: object
+                properties:
+                  list_name:
+                    type: string
+                    example: List_Name
+                  trendline:
+                    properties:
+                      yyyy-mm-dd:
+                        type: integer
+                        example: 10
+                  Pendings:
+                    type: integer
+                    example: 0
+                  Completed:
+                    type: integer
+                    example: 0
+                  Over_Due:
+                    type: integer
+                    example: 0
+        '500':
+          description: Internal Server Error
+        

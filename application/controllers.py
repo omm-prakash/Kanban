@@ -1,14 +1,12 @@
 import os
 import glob
-from crypt import methods
 from .database import db
-from flask import redirect, request
-from flask import render_template
-from flask import current_app as app
+from flask import redirect, request, render_template, current_app as app
 from datetime import datetime
-from flask_security import login_required, roles_accepted, roles_required, current_user
+from flask_security import login_required, current_user
 from application.models import *
 import matplotlib.pyplot as plt
+
 def present_time():
     now = datetime.now()
     present_datetime = datetime.isoformat(now)[:16]
@@ -22,10 +20,16 @@ def update_stat_delete(card,list,user):
         list.lpending-=1
         user.tpending-=1
 
+def clear_graphs():
+    files = glob.glob('./static/plots/*')
+    for f in files:
+        os.remove(f)    
+
 alert_error, alert_color, alert_condition, alert_message = False,'','',''
 # signedin,name,email = False,'',''
 @app.route("/home", methods=['GET'])
 def home():
+    clear_graphs()
     return render_template('index.html')
 
 @app.route("/", methods=['GET'])
@@ -35,17 +39,16 @@ def main():
         user = Account.query.get(id)
         if current_user.username is None:
             user.username = current_user.email.rpartition('@')[0]
-        role = Role.query.get(2)
+        role = Role.query.get(1)
         if role not in user.roles:
             user.roles.append(role)
         db.session.commit()
-    files = glob.glob('./static/plots/*')
-    for f in files:
-        os.remove(f)    
+    clear_graphs()
     return render_template('index.html')
 
 @app.route("/board", methods=['GET'])
 def board():
+    clear_graphs()
     global alert_error, alert_color, alert_condition, alert_message
     lists = []
     if current_user.is_authenticated:
@@ -74,7 +77,7 @@ def create_list():
         alert_color = 'alert-danger'
         alert_error = True
         alert_condition = 'Invalid Name'
-        alert_message = 'List name cant not be Null.'
+        alert_message = "List name can't not be Null."
         return redirect('/board')
     if len(current_user.lists)>=5:
         alert_color = 'alert-danger'
@@ -109,7 +112,11 @@ def update_list():
         alert_message = 'Null name not allowed'
         return redirect('/board')
     # list_check = List.query.filter_by(list_name=update_list_name).first()
-    name_exist = len([list for list in current_user.lists if list.list_name==update_list_name])>1
+    list = List.query.get(list_id)
+    current_user.lists.remove(list)
+    name_exist = len([list for list in current_user.lists if list.list_name==update_list_name])>0
+    current_user.lists.append(list)
+
     if name_exist:
         alert_color = 'alert-danger'
         alert_error = True
@@ -117,7 +124,6 @@ def update_list():
         alert_message = 'List name already exists, try another.'
         return redirect('/board')
 
-    list = List.query.get(list_id)
     list_desc=request.form['update_list_desc']
     try:
         list.list_name = update_list_name
@@ -143,8 +149,11 @@ def delete_list():
         alert_condition = 'List Not Exists'
         alert_message = 'List does not exists.'
         return redirect('/board')
-    for card in list.cards:
+    cards=list.cards
+    for card in cards:
         update_stat_delete(card, list, current_user)
+        list.cards.remove(card)
+        db.session.delete(card)
 
     current_user.lists.remove(list)
     db.session.delete(list)
@@ -164,6 +173,7 @@ def create_card():
         return redirect('/board')
 
     card_deadline = request.form['card_deadline']
+    # print(card_deadline,'--------------------------------')
     if card_deadline <= present_time():
         alert_color = 'alert-danger'
         alert_error = True
@@ -383,5 +393,3 @@ def summary():
     
     return render_template('summary.html',lists=lists,overdue=overdue_count)
 
-            # print('list ID: {}, list name: {}, list pending: {}, list completed: {}'.format(list.list_id,list.list_name,list.lpending,list.lcompleted))
-            # print(values)

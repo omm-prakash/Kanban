@@ -18,5 +18,11 @@ fi
 # Upgrade the PIP
 pip install --upgrade pip
 pip install -r requirements.txt
+
+
+# Refresh repository sources and install Insomnia to see API Documentation
+sudo apt-get update
+sudo apt-get install insomnia
+
 # Work done. so deactivate the virtual env
 deactivate

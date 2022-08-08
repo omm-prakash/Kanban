@@ -16,6 +16,6 @@ class LocalDevelopmentConfig(Config):
     SECURITY_PASSWORD_SALT = "really super secret" # Read from ENV in your case
     SECURITY_REGISTERABLE = True
     SECURITY_CONFIRMABLE = False
-    SECURITY_SEND_REGISTER_EMAIL = False #sdkjfhsk
+    SECURITY_SEND_REGISTER_EMAIL = False 
     SECURITY_UNAUTHORIZED_VIEW = None
     

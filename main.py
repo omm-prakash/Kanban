@@ -40,7 +40,7 @@ app.app_context().push()
 from application.api import *
 
 api.add_resource(ListApi, '/api/list/<string:email>/<string:list_name>', '/api/list/<string:email>')
-api.add_resource(CardApi, '/api/card/<int:list_id>/<string:card_name>', '/api/card/<int:list_id>')
+api.add_resource(CardApi, '/api/card/<int:list_id>/<string:card_name>', '/api/card/<int:list_id>', '/api/card/<string:email>/<int:list_id>/<string:card_name>')
 api.add_resource(SummaryApi, '/api/<string:email>/summary')
 
 # Import all the controllers so they are loaded

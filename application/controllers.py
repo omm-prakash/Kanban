@@ -20,10 +20,16 @@ def update_stat_delete(card,list,user):
         list.lpending-=1
         user.tpending-=1
 
+def clear_graphs():
+    files = glob.glob('./static/plots/*')
+    for f in files:
+        os.remove(f)    
+
 alert_error, alert_color, alert_condition, alert_message = False,'','',''
 # signedin,name,email = False,'',''
 @app.route("/home", methods=['GET'])
 def home():
+    clear_graphs()
     return render_template('index.html')
 
 @app.route("/", methods=['GET'])
@@ -33,17 +39,16 @@ def main():
         user = Account.query.get(id)
         if current_user.username is None:
             user.username = current_user.email.rpartition('@')[0]
-        role = Role.query.get(2)
+        role = Role.query.get(1)
         if role not in user.roles:
             user.roles.append(role)
         db.session.commit()
-    files = glob.glob('./static/plots/*')
-    for f in files:
-        os.remove(f)    
+    clear_graphs()
     return render_template('index.html')
 
 @app.route("/board", methods=['GET'])
 def board():
+    clear_graphs()
     global alert_error, alert_color, alert_condition, alert_message
     lists = []
     if current_user.is_authenticated:

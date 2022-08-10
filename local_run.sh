@@ -8,7 +8,7 @@ if [ -d ".env" ];
 then
     echo "Enabling virtual env"
 else
-    echo "No Virtual env. Please run setup.sh first"
+    echo "No Virtual env. Please run bash local_setup.sh first"
     exit N
 fi
 

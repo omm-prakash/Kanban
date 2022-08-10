@@ -1,5 +1,6 @@
 # Kanban
 A project to manage tasks and pending works.
+To see the flowchart of the database visit [here](https://github.com/omm-prakash/Kanban/blob/main/Kanban%20Project.pdf)
 
 # Local Setup
 - Clone the project

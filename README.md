@@ -3,10 +3,10 @@ A project to manage tasks and pending works.
 
 # Local Setup
 - Clone the project
-- Run `setup.sh`
+- Run `bash local_setup.sh`
 
 # Local Development Run
-- `local_run.sh` It will start the flask app in `development`. Suited for local development
+- `bash local_run.sh` It will start the flask app in `development`. Suited for local development
 
 # Replit run
 - Go to shell and run

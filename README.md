@@ -1,6 +1,10 @@
 # Kanban
-- A project to manage tasks and pending works.
-- To see the flowchart of the database visit [here](https://github.com/omm-prakash/Kanban/blob/main/Kanban%20Project.pdf)
+A project to manage tasks and pending works.Our to-do list application simplifies task management by providing an intuitive platform to organize your daily activities and goals. Say goodbye to missed deadlines and hello to a more efficient and organized you with our user-friendly to-do list application
+- To see the flowchart of the database, visit [here](https://github.com/omm-prakash/Kanban/blob/main/Kanban%20Project.pdf)
+
+**Here is a short video to explain the entire process and functionalities.**
+
+[![Video Alt Text](kanban_screencast.png)](kanban_screencast.mp4)
 
 # Local Setup
 - Clone the project
